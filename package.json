@@ -1,0 +1,19 @@
+{
+  "name": "foody-api",
+  "version": "1.0.0",
+  "description": "API that connected Foody iOS application fetching data from database (CouchDB)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://GiovanniL19@github.com/GiovanniL19/Foody-API.git"
+  },
+  "author": "Giovanni Lenguito <giovanni16.gl@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GiovanniL19/Foody-API/issues"
+  },
+  "homepage": "https://github.com/GiovanniL19/Foody-API#readme"
+}
