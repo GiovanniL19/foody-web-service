@@ -5,12 +5,43 @@ var	cradle 				= require('cradle'),
 var db = new(cradle.Connection)().database('foody');
 
 /*
- * POST /authenticate
+ * GET /authenticate
  *
  * AUTHENTICATE USER
  */
 exports.authenticate = function(req, res, next){
-	
+	var username = req.query.username;
+  var password = req.query.password;
+	var response = {
+    user: null
+  }
+  
+  if(username && password){
+    db.view('user/userByUsername', {
+      key: username,
+      include_docs: true
+    }, function(err, docs) {
+      if (err || docs.length == 0) {
+        console.log('Error: User not found');
+        res(404).status.send("User not found");
+      } else {
+        var user = docs[0];
+        console.log('Found user ' + user.key);
+        if (password === user.doc.data.password) {
+          console.log('Correct Password');
+          response.user = user.doc.data;
+          response.user.id = user.doc._id;
+          console.log(user.doc._id);
+          res.status(200).send(response);
+        } else {
+          console.log('Incorrect Password');
+          res.status(404).send("Wrong Password");
+        }
+      }
+    });
+  }else{
+    res.status(400).send("Bad request");
+  }
 };
 
 /*
@@ -28,14 +59,15 @@ exports.save = function(req, res){
     }
     
     newUser.type = "User";
-    newUser.memberDate = new Date();
+    newUser.data.memberDate = new Date();
     
     
     db.save(newUser, function (err, dbRes) {
       if(err){
         res.status(500).send(err)
       }else{
-        response.user = dbRes.data;
+        response.user = newUser.data;
+        response.user.id = dbRes.id
         res.status(201).send(response);
       }
     });

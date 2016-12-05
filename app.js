@@ -33,7 +33,7 @@ app.get('/',function(req, res){
 });
 
 //Users
-app.post('/auth', user.authenticate);
+app.get('/auth', user.authenticate);
 app.post('/users', user.save);
 app.get('/users/:user_id', user.get);
 app.put('/users/:user_id', user.update)
