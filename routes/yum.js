@@ -113,3 +113,28 @@ exports.get = function(req, res){
     
   });
 }
+
+/*
+ * YUM /yums
+ *
+ * YUM YUM
+ */
+exports.getArray = function(req, res){
+  var response = {
+    posts: []
+  }
+  
+  db.view('user/userById', {
+    key: req.param('user_id'),
+    include_docs: true
+  }, function(err, docs) {
+    if (err || docs.length == 0) {
+      console.log('Error: User not found');
+      res.status(404).send("User not found");
+    } else {
+      var foundUser = docs[0].doc;
+      res.status(200).send(foundUser.data.yums);
+    }
+    
+  });
+}

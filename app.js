@@ -50,6 +50,7 @@ app.delete('/posts/:post_id', posts.delete);
 //Yum
 app.post('/yums', yum.manage);
 app.get('/yums/:user_id', yum.get);
+app.get('/yums/list/:user_id', yum.getArray);
 
 app.listen(port);
 console.log('Running on http://localhost:' + port);
