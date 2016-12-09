@@ -8,7 +8,7 @@ var db = new(cradle.Connection)().database('foody');
 
 var user = require('./routes/user.js');
 var posts = require('./routes/post.js');
-
+var yum = require('./routes/yum.js');
 
 var port = 3002;
     
@@ -41,12 +41,15 @@ app.delete('/users/:user_id', user.delete);
 app.get('/check', user.check);
 
 //Posts
-app.get('/posts/:post_id', posts.getById);
+app.get('/postsByUser/:user_id', posts.getByUserId);
 app.get('/posts', posts.get);
 app.post('/posts', posts.save);
 app.put('/posts/:post_id', posts.update);
 app.delete('/posts/:post_id', posts.delete);
 
+//Yum
+app.post('/yums', yum.manage);
+app.get('/yums/:user_id', yum.get);
 
 app.listen(port);
 console.log('Running on http://localhost:' + port);

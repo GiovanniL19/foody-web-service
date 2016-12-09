@@ -23,7 +23,7 @@ exports.authenticate = function(req, res, next){
     }, function(err, docs) {
       if (err || docs.length == 0) {
         console.log('Error: User not found');
-        res(404).status.send("User not found");
+        res.status(404).send("User not found");
       } else {
         var user = docs[0];
         console.log('Found user ' + user.key);
@@ -60,7 +60,7 @@ exports.save = function(req, res){
     
     newUser.type = "User";
     newUser.data.memberDate = new Date();
-    
+    newUser.data.yums = []
     
     db.save(newUser, function (err, dbRes) {
       if(err){
@@ -91,7 +91,31 @@ exports.get = function(req, res){
  * UPDATES USER BY ID
  */
 exports.update = function(req, res){
-	
+	var userId = req.param('user_id');
+  var user = {
+     data: req.body
+   }
+   user.data.id = userId
+   user.data.lastModified = Date.now();
+
+   db.save(userId, user, function(err, dbRes) {
+     if (err) {
+       console.log('Could not update user');
+       console.log(err);
+       res.status(500).send(err);
+     } else {
+       console.log(userId + ' has been updated');
+       var response = {
+         user: null
+       };
+       
+       response.user = req.body;
+       response.user.id = userId;
+       response.user.rev = dbRes.rev;
+       
+       res.status(200).send(response);
+     }
+   });
 };
 
 /*
@@ -100,7 +124,21 @@ exports.update = function(req, res){
  * DELETE USER BY ID
  */
 exports.delete = function(req, res){
+  var userID = req.param('user_id');
 	
+  db.remove(userID, function(err, dbRes) {
+    if (dbRes) {
+      if (err) {
+        console.log('There was a error: ');
+        res.status(500).send(err);
+      } else {
+        console.log('Deleted user with id of: ' + userID);
+        res.status(200).send({});
+      }
+    } else {
+      res.status(404).send("404: Not found");
+    }
+  });
 };
 
 /*
