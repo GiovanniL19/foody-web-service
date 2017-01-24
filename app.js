@@ -1,7 +1,8 @@
 var express 			= require('express'),
  		cradle 				= require('cradle'),
 		path          = require('path'),
-    bodyParser    = require('body-parser');
+    bodyParser    = require('body-parser'),
+    ip            = require("ip");
 
 //var db = new(cradle.Connection)('http://52.89.48.249', 5984).database('foody');
 var db = new(cradle.Connection)().database('foody');
@@ -53,4 +54,4 @@ app.get('/yums/:user_id', yum.get);
 app.get('/yums/list/:user_id', yum.getArray);
 
 app.listen(port);
-console.log('Running on http://localhost:' + port);
+console.log('Running on http://' + ip.address() + ':' + port);
